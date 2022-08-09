@@ -12,7 +12,8 @@ class Calculator{
         this.operation = undefined;
     };
     clear(){
-        this.currentResult = this.currentResult.toString.slice(0, -1);
+        const myNum = this.currentResult;
+        this.currentResult = myNum.toString.slice(0,-1);
     };
     appendNumber(num){
         //To have only one decimal in a string
@@ -58,7 +59,11 @@ class Calculator{
     };
     updateDisplay(){
         this.currentResultButton.innerText = this.currentResult;
-        this.previousResultButton.innerText = this.previousResult;
+        if(this.operation != null)
+        {
+            this.previousResultButton.innerText = 
+            `${this.previousResult} ${this.operation}`
+        }
     };
 
 
@@ -99,6 +104,6 @@ allClearButton.addEventListener('click',()=>{
     calculator.updateDisplay();  
 });
 clearButton.addEventListener('click',()=>{
-    calculator.delete();
-    calculator.updateDisplay();
+    calculator.clear();
+    calculator.updateDisplay(); 
 });
