@@ -11,12 +11,51 @@ class Calculator{
         this.previousResult = "";
         this.operation = undefined;
     };
-    clear(){};
-    appendNumber(num){
-        this.currentResult = num;
+    clear(){
+        this.currentResult = this.currentResult.toString.slice(0, -1);
     };
-    chooseOperation(operation){};
-    compute(){};
+    appendNumber(num){
+        //To have only one decimal in a string
+        if(num === '.' && this.currentResult.includes('.'))
+        {
+            return ; 
+        }
+        this.currentResult = this.currentResult.toString() + num.toString();
+    };
+    chooseOperation(operation){
+        if(this.currentResult === '') return;
+        if(this.previousResult !== ''){
+            this.compute();
+        }
+        this.operation = operation;
+        this.previousResult = this.currentResult;
+        this.currentResult = "";
+    };
+    compute(){
+        let compute;
+        const prev = parseFloat(this.previousResult);
+        const curr = parseFloat(this.currentResult);
+        if(isNaN(prev)||isNaN(curr)) return;
+        switch(this.operation){
+            case '+':
+            compute = prev + curr;
+            break;
+            case '-':
+            compute = prev - curr;
+            break;
+            case '*':
+            compute = prev * curr;
+            break;
+            case '/':
+            compute = prev / curr;
+            break;
+            default:
+            return;
+        }
+        this.currentResult = compute;
+        this.operation = undefined;
+        this.previousResult = '';
+    };
     updateDisplay(){
         this.currentResultButton.innerText = this.currentResult;
         this.previousResultButton.innerText = this.previousResult;
@@ -43,4 +82,23 @@ numberButtons.forEach(button =>{
         calculator.appendNumber(button.textContent);
         calculator.updateDisplay();
     });
+});
+
+operationButtons.forEach(operation =>{
+    operation.addEventListener('click',()=>{
+        calculator.chooseOperation(operation.textContent);
+        calculator.updateDisplay();  
+    });
+});
+equalsButton.addEventListener('click',()=>{
+        calculator.compute();
+        calculator.updateDisplay();  
+    });
+allClearButton.addEventListener('click',()=>{
+    calculator.allClear();
+    calculator.updateDisplay();  
+});
+clearButton.addEventListener('click',()=>{
+    calculator.delete();
+    calculator.updateDisplay();
 });
